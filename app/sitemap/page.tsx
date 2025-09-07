@@ -1,56 +1,61 @@
-import React from "react";
+import Link from "next/link";
 
 const Sitemap = () => (
   <>
     <div className="w-full flex justify-start mt-2 mb-4 px-4">
-      <a href="/" className="text-indigo-700 font-semibold hover:underline bg-white/80 px-3 py-1 rounded shadow">&larr; Back to Home</a>
+      <Link
+        href="/"
+        className="text-indigo-700 font-semibold hover:underline bg-white/80 px-3 py-1 rounded shadow"
+      >
+        &larr; Back to Home
+      </Link>
     </div>
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-3xl font-bold">Sitemap</h1>
       <ul className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-2 list-disc pl-6">
         <li>
-          <a className="text-indigo-600 hover:underline" href="/">
+          <Link className="text-indigo-600 hover:underline" href="/">
             Home
-          </a>
+          </Link>
         </li>
         <li>
-          <a
+          <Link
             className="text-indigo-600 hover:underline"
             href="/school-education"
           >
             School Education
-          </a>
+          </Link>
         </li>
         <li>
-          <a className="text-indigo-600 hover:underline" href="/counselling">
+          <Link className="text-indigo-600 hover:underline" href="/counselling">
             Child/Parent Counselling
-          </a>
+          </Link>
         </li>
         <li>
-          <a className="text-indigo-600 hover:underline" href="/languages">
+          <Link className="text-indigo-600 hover:underline" href="/languages">
             Languages
-          </a>
+          </Link>
         </li>
         <li>
-          <a className="text-indigo-600 hover:underline" href="/about">
+          <Link className="text-indigo-600 hover:underline" href="/about">
             About Us
-          </a>
+          </Link>
         </li>
         <li>
-          <a className="text-indigo-600 hover:underline" href="/contact">
+          <Link className="text-indigo-600 hover:underline" href="/contact">
             Contact Us
-          </a>
+          </Link>
         </li>
         <li>
-          <a className="text-indigo-600 hover:underline" href="/terms">
+          <Link className="text-indigo-600 hover:underline" href="/terms">
             Terms &amp; Conditions
-          </a>
+          </Link>
         </li>
       </ul>
       <p className="mt-10">
-        <a className="text-indigo-600 hover:underline" href="/">
+        <Link className="text-indigo-600 hover:underline" href="/">
           &larr; Back to Home
-        </a>
+        </Link>
       </p>
     </main>
   </>
