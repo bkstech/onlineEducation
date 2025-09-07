@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import emailjs from "emailjs-com";
+import Link from "next/link";
 
 const getRandomInt = (min: number, max: number) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
@@ -61,12 +62,12 @@ const Contact = () => {
   return (
     <>
       <div className="w-full flex justify-start mt-2 mb-4 px-4">
-        <a
-          href="/"
-          className="text-indigo-700 font-semibold hover:underline bg-white/80 px-3 py-1 rounded shadow"
-        >
-          &larr; Back to Home
-        </a>
+          <Link
+            href="/"
+            className="text-indigo-700 font-semibold hover:underline bg-white/80 px-3 py-1 rounded shadow"
+          >
+            &larr; Back to Home
+          </Link>
       </div>
       <main>
         <section

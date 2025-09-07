@@ -1,14 +1,15 @@
-import React from "react";
+
+import Link from "next/link";
 
 const About = () => (
   <>
     <div className="w-full flex justify-start mt-2 mb-4 px-4">
-      <a
+      <Link
         href="/"
         className="text-indigo-700 font-semibold hover:underline bg-white/80 px-3 py-1 rounded shadow"
       >
         &larr; Back to Home
-      </a>
+      </Link>
     </div>
     {/* Header and navigation would be in layout. Main content below: */}
     <main>

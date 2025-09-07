@@ -3,7 +3,12 @@ import React from "react";
 const Terms = () => (
   <>
     <div className="w-full flex justify-start mt-2 mb-4 px-4">
-      <a href="/" className="text-indigo-700 font-semibold hover:underline bg-white/80 px-3 py-1 rounded shadow">&larr; Back to Home</a>
+      <a
+        href="/"
+        className="text-indigo-700 font-semibold hover:underline bg-white/80 px-3 py-1 rounded shadow"
+      >
+        &larr; Back to Home
+      </a>
     </div>
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-3xl font-bold">Terms &amp; Conditions</h1>

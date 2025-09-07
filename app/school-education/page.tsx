@@ -1,13 +1,16 @@
+import Link from "next/link";
+
 const SchoolEducation = () => (
   <>
     <div className="w-full flex justify-start mt-2 mb-4 px-4">
-      <a
+      <Link
         href="/"
         className="text-indigo-700 font-semibold hover:underline bg-white/80 px-3 py-1 rounded shadow"
       >
         &larr; Back to Home
-      </a>
+      </Link>
     </div>
+import Link from "next/link";
     <main>
       <section className="bg-slate-50 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
