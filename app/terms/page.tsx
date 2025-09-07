@@ -12,7 +12,7 @@ const Terms = () => (
       <h1 className="text-3xl font-bold">Terms &amp; Conditions</h1>
       <p className="mt-4 text-slate-700">
         These terms and conditions outline the rules and regulations for the use
-        of EduCounsel's website and services.
+        of EduCounsel&apos;s website and services.
       </p>
       <h2 className="mt-8 text-xl font-semibold">1. Services</h2>
       <p className="mt-2 text-slate-700">
@@ -32,7 +32,7 @@ const Terms = () => (
       </p>
       <h2 className="mt-6 text-xl font-semibold">4. Liability</h2>
       <p className="mt-2 text-slate-700">
-        Services are provided "as is". We are not liable for any indirect or
+        Services are provided &quot;as is&quot;. We are not liable for any indirect or
         consequential loss.
       </p>
       <h2 className="mt-6 text-xl font-semibold">5. Contact</h2>
