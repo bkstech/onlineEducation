@@ -1,8 +1,7 @@
-
 import Link from "next/link";
 
 const About = () => (
-  <>
+  <div>
     <div className="w-full flex justify-start mt-2 mb-4 px-4">
       <Link
         href="/"
@@ -71,7 +70,7 @@ const About = () => (
         </div>
       </section>
     </main>
-  </>
+  </div>
 );
 
 export default About;
