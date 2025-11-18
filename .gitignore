@@ -40,3 +40,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 /api/.vs/api/FileContentIndex/34f0dd4e-ad8b-4ffc-a5ae-b214fda9018c.vsidx
+/api/.vs/api/FileContentIndex/79bec451-c38f-4952-b22d-6203e7801811.vsidx
+/api/.vs/api/FileContentIndex/ceb770b0-080a-4a05-900e-230e85e69930.vsidx
+/api/.vs/api/FileContentIndex/d408ab3a-b46d-4623-b10e-dcbb39c6de34.vsidx
+/api/.vs/api/FileContentIndex/df87dcfd-2d9b-4ec3-bd39-ea19c1733de7.vsidx

@@ -61,15 +61,19 @@ const Contact = () => {
 
   return (
     <>
-      <div className="w-full flex justify-start mt-2 mb-4 px-4">
-          <Link
-            href="/"
-            className="text-indigo-700 font-semibold hover:underline bg-white/80 px-3 py-1 rounded shadow"
-          >
-            &larr; Back to Home
-          </Link>
+      <div className="w-full flex items-center mt-2 mb-4 px-4">
+        <Link
+          href="/"
+          className="text-indigo-700 font-semibold hover:underline bg-white/80 px-3 py-1 rounded shadow"
+        >
+          &larr; Back to Home
+        </Link>
       </div>
       <main>
+        <h1 className="text-2xl font-bold text-center mb-6">
+          Submit your request
+        </h1>
+
         <section
           className="bg-white flex items-center justify-center"
           style={{ minHeight: "50vh" }}
@@ -81,14 +85,14 @@ const Contact = () => {
                   className="block text-sm font-medium text-slate-700"
                   htmlFor="full_name"
                 >
-                  Full name
+                  Your Full name
                 </label>
                 <input
                   id="full_name"
                   name="full_name"
                   type="text"
                   required
-                  className="mt-1 w-full rounded-md border-slate-300 focus:border-indigo-500 focus:ring-indigo-500"
+                  className="mt-1 w-full rounded-md border-slate-300 bg-slate-100 focus:border-indigo-500 focus:ring-indigo-500"
                   placeholder="Madhuri Goel"
                 />
               </div>
@@ -105,7 +109,7 @@ const Contact = () => {
                     name="email"
                     type="email"
                     required
-                    className="mt-1 w-full rounded-md border-slate-300 focus:border-indigo-500 focus:ring-indigo-500"
+                    className="mt-1 w-full rounded-md border-slate-300 bg-slate-100 focus:border-indigo-500 focus:ring-indigo-500"
                     placeholder="madhuri@example.com"
                   />
                 </div>
@@ -120,7 +124,7 @@ const Contact = () => {
                     id="phone"
                     name="phone"
                     type="tel"
-                    className="mt-1 w-full rounded-md border-slate-300 focus:border-indigo-500 focus:ring-indigo-500"
+                    className="mt-1 w-full rounded-md border-slate-300 bg-slate-100 focus:border-indigo-500 focus:ring-indigo-500"
                     placeholder="+91 9101 101 101"
                   />
                 </div>
@@ -137,7 +141,7 @@ const Contact = () => {
                   name="description"
                   rows={4}
                   required
-                  className="mt-1 w-full rounded-md border-slate-300 focus:border-indigo-500 focus:ring-indigo-500"
+                  className="mt-1 w-full rounded-md border-slate-300 bg-slate-100 focus:border-indigo-500 focus:ring-indigo-500"
                   placeholder="Tell us about your needs..."
                 ></textarea>
               </div>
