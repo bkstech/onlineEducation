@@ -2,22 +2,34 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { login } from "@/lib/auth";
 
 export default function SignIn() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
-    // TODO: Add your authentication logic here
-    setTimeout(() => {
+    
+    try {
+      await login({ email, password });
+      // Redirect to home page on successful login
+      router.push("/");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An error occurred during login");
+      }
+    } finally {
       setLoading(false);
-      setError("Demo only: No authentication logic implemented.");
-    }, 1000);
+    }
   };
 
   const handleGoogleSignIn = () => {
