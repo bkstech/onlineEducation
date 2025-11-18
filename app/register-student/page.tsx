@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { register } from "@/lib/auth";
 
 const countriesRaw = [
   { name: "India (Bharat)", code: "+91" },
@@ -19,10 +21,15 @@ const countries = [
 ].filter(Boolean);
 
 export default function RegisterStudent() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [country, setCountry] = useState(countries[0]?.name || "");
-  const [phone, setPhone] = useState("");
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: "",
+    country: countries[0]?.name || "",
+    phone: "",
+  });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -31,18 +38,43 @@ export default function RegisterStudent() {
       (c): c is { name: string; code: string } =>
         !!c && c.name === e.target.value
     );
-    setCountry(selected ? selected.name : "");
+    setFormData({ ...formData, country: selected ? selected.name : "" });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
-    // TODO: Add registration logic
-    setTimeout(() => {
+
+    try {
+      // Create registration request with required fields
+      // Using default values for fields not collected by the form
+      await register({
+        firstname: formData.firstname,
+        lastname: formData.lastname,
+        email: formData.email,
+        password: formData.password,
+        phone: formData.phone,
+        country: formData.country,
+        // Default values for required fields not in the form
+        address: "Not provided",
+        city: "Not provided",
+        state: "Not provided",
+        zip: "00000",
+        dob: new Date("2000-01-01").toISOString(),
+      });
+      
+      // Redirect to home page on successful registration
+      router.push("/");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An error occurred during registration");
+      }
+    } finally {
       setLoading(false);
-      setError("Demo only: Registration logic not implemented.");
-    }, 1000);
+    }
   };
 
   return (
@@ -52,6 +84,44 @@ export default function RegisterStudent() {
           Register as Student
         </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label
+              htmlFor="firstname"
+              className="block text-sm font-medium text-slate-700"
+            >
+              First Name
+            </label>
+            <input
+              id="firstname"
+              name="firstname"
+              type="text"
+              required
+              className="mt-1 w-full rounded-md border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 bg-slate-100"
+              value={formData.firstname}
+              onChange={(e) =>
+                setFormData({ ...formData, firstname: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="lastname"
+              className="block text-sm font-medium text-slate-700"
+            >
+              Last Name
+            </label>
+            <input
+              id="lastname"
+              name="lastname"
+              type="text"
+              required
+              className="mt-1 w-full rounded-md border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 bg-slate-100"
+              value={formData.lastname}
+              onChange={(e) =>
+                setFormData({ ...formData, lastname: e.target.value })
+              }
+            />
+          </div>
           <div>
             <label
               htmlFor="email"
@@ -66,8 +136,10 @@ export default function RegisterStudent() {
               autoComplete="email"
               required
               className="mt-1 w-full rounded-md border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 bg-slate-100"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
             />
           </div>
           <div>
@@ -84,8 +156,10 @@ export default function RegisterStudent() {
               autoComplete="new-password"
               required
               className="mt-1 w-full rounded-md border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 bg-slate-100"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
             />
           </div>
           <div>
@@ -99,7 +173,7 @@ export default function RegisterStudent() {
               id="country"
               name="country"
               className="mt-1 w-full rounded-md border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 bg-slate-100"
-              value={country}
+              value={formData.country}
               onChange={handleCountryChange}
             >
               {countries.map((c) =>
@@ -124,8 +198,10 @@ export default function RegisterStudent() {
               type="tel"
               required
               className="mt-1 w-full rounded-md border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 bg-slate-100"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              value={formData.phone}
+              onChange={(e) =>
+                setFormData({ ...formData, phone: e.target.value })
+              }
             />
           </div>
           {error && <p className="text-red-600 text-sm">{error}</p>}

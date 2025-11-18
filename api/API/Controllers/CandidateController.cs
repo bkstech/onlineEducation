@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-using System.Text;
 using API.Models;
+using BCrypt.Net;
 
 namespace CandidateApi.Controllers
 {
@@ -37,7 +36,10 @@ namespace CandidateApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Candidate>> PostCandidate(Candidate candidate)
         {
-            candidate.Userpassword = HashPassword(candidate.Userpassword);
+            if (!string.IsNullOrEmpty(candidate.Userpassword))
+            {
+                candidate.Userpassword = BCrypt.Net.BCrypt.HashPassword(candidate.Userpassword);
+            }
             _context.Candidate.Add(candidate);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetCandidate), new { id = candidate.Id }, candidate);
@@ -49,7 +51,10 @@ namespace CandidateApi.Controllers
         {
             if (id != candidate.Id)
                 return BadRequest();
-            candidate.Userpassword = HashPassword(candidate.Userpassword);
+            if (!string.IsNullOrEmpty(candidate.Userpassword))
+            {
+                candidate.Userpassword = BCrypt.Net.BCrypt.HashPassword(candidate.Userpassword);
+            }
             _context.Entry(candidate).State = EntityState.Modified;
             try
             {
@@ -75,18 +80,6 @@ namespace CandidateApi.Controllers
             _context.Candidate.Remove(candidate);
             await _context.SaveChangesAsync();
             return NoContent();
-        }
-
-        private string HashPassword(string password)
-        {
-            using (var sha256 = SHA256.Create())
-            {
-                var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                var builder = new StringBuilder();
-                foreach (var b in bytes)
-                    builder.Append(b.ToString("x2"));
-                return builder.ToString();
-            }
         }
     }
 }

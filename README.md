@@ -1,6 +1,30 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Authentication System
+
+This project includes a complete JWT-based authentication system with email/password authentication. See [AUTHENTICATION.md](AUTHENTICATION.md) for detailed documentation on:
+
+- JWT authentication with BCrypt password hashing
+- Login and registration endpoints
+- Frontend integration with Next.js
+- API configuration and security features
+
 ## Getting Started
+
+### Prerequisites
+
+1. MySQL Database (version 8.0+) with the `estudydb` database
+2. .NET 8.0 SDK for the API
+3. Node.js 18+ for Next.js
+
+### Start Backend API
+
+```bash
+cd api/API
+dotnet run --urls "http://localhost:5000"
+```
+
+### Start Frontend
 
 First, run the development server:
 
