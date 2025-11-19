@@ -67,7 +67,7 @@ Next.js (Frontend)
 ### Frontend (.env.local)
 
 ```
-NEXT_PUBLIC_API_URL=http://localhost:5000
+NEXT_PUBLIC_API_URL=https://localhost:5000
 ```
 
 ## Prerequisites
@@ -93,7 +93,7 @@ NEXT_PUBLIC_API_URL=http://localhost:5000
 
 ```bash
 cd api/API
-dotnet run --urls "http://localhost:5000"
+dotnet run --urls "https://localhost:5000"
 ```
 
 ### Start Frontend
@@ -189,7 +189,7 @@ Response:
 
 ```bash
 # Register
-curl -X POST http://localhost:5000/api/Auth/Register \
+curl -X POST https://localhost:5000/api/Auth/Register \
   -H "Content-Type: application/json" \
   -d '{
     "firstname": "John",
@@ -206,7 +206,7 @@ curl -X POST http://localhost:5000/api/Auth/Register \
   }'
 
 # Login
-curl -X POST http://localhost:5000/api/Auth/Login \
+curl -X POST https://localhost:5000/api/Auth/Login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "john@example.com",
