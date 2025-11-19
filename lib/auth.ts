@@ -1,5 +1,6 @@
 // API Configuration
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api/";
 
 // Types
 export interface LoginRequest {
@@ -73,9 +74,7 @@ export const isAuthenticated = (): boolean => {
 };
 
 // API Functions
-export const login = async (
-  request: LoginRequest
-): Promise<AuthResponse> => {
+export const login = async (request: LoginRequest): Promise<AuthResponse> => {
   const response = await fetch(`${API_BASE_URL}/api/Auth/Login`, {
     method: "POST",
     headers: {
@@ -85,12 +84,14 @@ export const login = async (
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: "Login failed" }));
+    const error = await response
+      .json()
+      .catch(() => ({ message: "Login failed" }));
     throw new Error(error.message || "Login failed");
   }
 
   const data: AuthResponse = await response.json();
-  
+
   // Save token and user info
   saveAuthToken(data.token);
   saveUserInfo({
@@ -115,12 +116,14 @@ export const register = async (
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: "Registration failed" }));
+    const error = await response
+      .json()
+      .catch(() => ({ message: "Registration failed" }));
     throw new Error(error.message || "Registration failed");
   }
 
   const data: AuthResponse = await response.json();
-  
+
   // Save token and user info
   saveAuthToken(data.token);
   saveUserInfo({
@@ -143,7 +146,7 @@ export const logout = () => {
 // Helper function to make authenticated API calls
 export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   const token = getAuthToken();
-  
+
   const headers = {
     ...options.headers,
     "Content-Type": "application/json",
