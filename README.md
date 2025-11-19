@@ -21,7 +21,7 @@ This project includes a complete JWT-based authentication system with email/pass
 
 ```bash
 cd api/API
-dotnet run --urls "http://localhost:5000"
+dotnet run --urls "https://localhost:5000"
 ```
 
 ### Start Frontend
