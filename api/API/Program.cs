@@ -16,6 +16,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     )
 );
 
+// Add Swagger services
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 // Configure JWT Authentication
 var jwtKey = builder.Configuration["Jwt:Key"];
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
@@ -57,6 +61,7 @@ builder.Services.AddCors(options =>
     });
 });
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -64,5 +69,18 @@ app.UseCors("AllowNextJS");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+
+// Enable Swagger middleware
+if (app.Environment.IsDevelopment() || app.Environment.IsStaging() || app.Environment.IsProduction())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    // Redirect root URL to /swagger
+    app.MapGet("/", context => {
+        context.Response.Redirect("/swagger");
+        return Task.CompletedTask;
+    });
+}
 
 app.Run();
