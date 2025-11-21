@@ -1,5 +1,6 @@
 // API Configuration
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "https://localhost:5000";
 
 // Types
 export interface LoginRequest {
@@ -30,29 +31,8 @@ export interface AuthResponse {
   id: number;
 }
 
-// Token Management
-const TOKEN_KEY = "auth_token";
+// User info management (no JWT storage)
 const USER_KEY = "auth_user";
-
-export const saveAuthToken = (token: string) => {
-  if (typeof window !== "undefined") {
-    localStorage.setItem(TOKEN_KEY, token);
-  }
-};
-
-export const getAuthToken = (): string | null => {
-  if (typeof window !== "undefined") {
-    return localStorage.getItem(TOKEN_KEY);
-  }
-  return null;
-};
-
-export const removeAuthToken = () => {
-  if (typeof window !== "undefined") {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
-  }
-};
 
 export const saveUserInfo = (user: Omit<AuthResponse, "token">) => {
   if (typeof window !== "undefined") {
@@ -68,8 +48,15 @@ export const getUserInfo = (): Omit<AuthResponse, "token"> | null => {
   return null;
 };
 
+export const removeUserInfo = () => {
+  if (typeof window !== "undefined") {
+    localStorage.removeItem(USER_KEY);
+  }
+};
+
 export const isAuthenticated = (): boolean => {
-  return !!getAuthToken();
+  // With HttpOnly cookie, you may need to check by calling a /me or /profile endpoint
+  return !!getUserInfo();
 };
 
 // API Functions
@@ -79,6 +66,7 @@ export const login = async (request: LoginRequest): Promise<AuthResponse> => {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include", // Send/receive cookies
     body: JSON.stringify(request),
   });
 
@@ -91,8 +79,7 @@ export const login = async (request: LoginRequest): Promise<AuthResponse> => {
 
   const data: AuthResponse = await response.json();
 
-  // Save token and user info
-  saveAuthToken(data.token);
+  // Only save user info (not token)
   saveUserInfo({
     email: data.email,
     firstname: data.firstname,
@@ -111,6 +98,7 @@ export const register = async (
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include", // Send/receive cookies
     body: JSON.stringify(request),
   });
 
@@ -123,8 +111,7 @@ export const register = async (
 
   const data: AuthResponse = await response.json();
 
-  // Save token and user info
-  saveAuthToken(data.token);
+  // Only save user info (not token)
   saveUserInfo({
     email: data.email,
     firstname: data.firstname,
@@ -136,30 +123,27 @@ export const register = async (
 };
 
 export const logout = () => {
-  removeAuthToken();
+  removeUserInfo();
   if (typeof window !== "undefined") {
     window.location.href = "/signin";
   }
 };
 
-// Helper function to make authenticated API calls
+// Helper function to make authenticated API calls (cookie-based)
 export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
-  const token = getAuthToken();
-
   const headers = {
     ...options.headers,
     "Content-Type": "application/json",
-    ...(token && { Authorization: `Bearer ${token}` }),
   };
 
   const response = await fetch(`${API_BASE_URL}${url}`, {
     ...options,
     headers,
+    credentials: "include", // Always send cookies
   });
 
   if (response.status === 401) {
-    // Token expired or invalid
-    removeAuthToken();
+    removeUserInfo();
     if (typeof window !== "undefined") {
       window.location.href = "/signin";
     }
