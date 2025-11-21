@@ -16,10 +16,12 @@ Next.js (Frontend)
 ### Backend (.NET API)
 
 1. **Authentication Endpoints** (`/api/Auth`)
+
    - `POST /api/Auth/Login` - Authenticate user with email/password
    - `POST /api/Auth/Register` - Register new candidate with BCrypt hashed password
 
 2. **Security Features**
+
    - BCrypt password hashing (replaced SHA256)
    - JWT token generation with configurable expiry
    - JWT Bearer authentication middleware
@@ -34,6 +36,7 @@ Next.js (Frontend)
 ### Frontend (Next.js)
 
 1. **Authentication Pages**
+
    - `/signin` - Login page with API integration
    - `/register-student` - Student registration with API integration
 
@@ -67,12 +70,13 @@ Next.js (Frontend)
 ### Frontend (.env.local)
 
 ```
-NEXT_PUBLIC_API_URL=https://localhost:5000
+NEXT_PUBLIC_API_URL=https://localhost:5001
 ```
 
 ## Prerequisites
 
 1. **MySQL Database**
+
    - Version: 8.0+
    - Database: `estudydb`
    - Table: `candidate` with columns:
@@ -82,6 +86,7 @@ NEXT_PUBLIC_API_URL=https://localhost:5000
      - `firstname`, `lastname`, etc.
 
 2. **.NET Runtime**
+
    - .NET 8.0 SDK
 
 3. **Node.js**
@@ -108,6 +113,7 @@ The frontend will be available at `http://localhost:3000`
 ## API Endpoints
 
 ### Login
+
 ```
 POST /api/Auth/Login
 Content-Type: application/json
@@ -128,6 +134,7 @@ Response:
 ```
 
 ### Register
+
 ```
 POST /api/Auth/Register
 Content-Type: application/json
@@ -170,12 +177,14 @@ Response:
 ### Manual Testing
 
 1. **Register a New User**
+
    - Navigate to `/register-student`
    - Fill in the form
    - Click "Register"
    - Should redirect to home page on success
 
 2. **Login**
+
    - Navigate to `/signin`
    - Enter registered email and password
    - Click "Sign In"
@@ -222,6 +231,7 @@ curl -X POST https://localhost:5000/api/Auth/Login \
 ## Changes Made to Existing Code
 
 1. **CandidateController.cs**
+
    - Replaced SHA256 password hashing with BCrypt
    - Added null checks for password hashing
 
@@ -235,15 +245,18 @@ curl -X POST https://localhost:5000/api/Auth/Login \
 ### Common Issues
 
 1. **CORS Errors**
+
    - Ensure API CORS policy includes your frontend URL
    - Check browser console for specific CORS errors
 
 2. **401 Unauthorized**
+
    - Verify token is being sent in Authorization header
    - Check token expiry
    - Verify JWT configuration matches on frontend/backend
 
 3. **Database Connection**
+
    - Ensure MySQL is running
    - Verify connection string in appsettings.json
    - Check database credentials
