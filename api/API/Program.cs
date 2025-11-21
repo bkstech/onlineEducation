@@ -47,6 +47,21 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = jwtAudience,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
     };
+
+    // Read JWT from HttpOnly cookie if present
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Cookies["jwt"];
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                context.Token = accessToken;
+            }
+            // else fallback to Authorization header (default)
+            return Task.CompletedTask;
+        }
+    };
 });
 
 // Add CORS policy for Next.js frontend
@@ -54,7 +69,11 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowNextJS", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "http://localhost:3001")
+        policy.WithOrigins(
+                        "http://localhost:3000",
+            "http://localhost:3001",
+            "https://localhost:3000",
+            "https://localhost:3001")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
