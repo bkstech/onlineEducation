@@ -52,6 +52,15 @@ public class AuthController : ControllerBase
         // Generate JWT token
         var token = GenerateJwtToken(candidate);
 
+        // Set JWT as HttpOnly, Secure cookie
+        Response.Cookies.Append("jwt", token, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTimeOffset.UtcNow.AddMinutes(60)
+        });
+
         return Ok(new AuthResponse
         {
             Token = token,
@@ -114,6 +123,15 @@ public class AuthController : ControllerBase
 
         // Generate JWT token
         var token = GenerateJwtToken(candidate);
+
+        // Set JWT as HttpOnly, Secure cookie
+        Response.Cookies.Append("jwt", token, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTimeOffset.UtcNow.AddMinutes(60)
+        });
 
         return Ok(new AuthResponse
         {
