@@ -60,7 +60,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = (user: AuthState["user"]) => {
-    saveUserInfo(user);
+    if (user) {
+      saveUserInfo(user);
+    }
     dispatch({ type: LOGIN, payload: user });
   };
 
