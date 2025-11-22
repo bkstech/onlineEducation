@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import UserNav from "./UserNav";
+import { AuthProvider } from "./AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,125 +31,129 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        {/* Back to Home link in top left corner */}
-        <div className="absolute left-0 top-0 m-4 z-50">
-          <Link
-            href="/"
-            className="text-indigo-700 font-semibold hover:underline bg-white/80 px-3 py-1 rounded shadow"
-          >
-            &larr; Back to Home
-          </Link>
-        </div>
-        {/* Top Navigation/Header */}
-        <header className="border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex h-16 items-center justify-between">
-              <Link
-                href="/"
-                className="flex items-center gap-2 font-semibold text-indigo-700"
-              >
-                <i className="fa-solid fa-graduation-cap"></i>
-                <span>EduCounsel</span>
-              </Link>
-              <button
-                id="mobileMenuBtn"
-                className="sm:hidden p-2 text-slate-600"
-                aria-label="Open Menu"
-              >
-                <i className="fa-solid fa-bars text-xl"></i>
-              </button>
-              <nav id="mainNav" className="hidden sm:flex gap-6">
-                <Link href="/" className="nav-link hover:text-indigo-700">
-                  Home
-                </Link>
+        <AuthProvider>
+          {/* Back to Home link in top left corner */}
+          <div className="absolute left-0 top-0 m-4 z-50">
+            <Link
+              href="/"
+              className="text-indigo-700 font-semibold hover:underline bg-white/80 px-3 py-1 rounded shadow"
+            >
+              &larr; Back to Home
+            </Link>
+          </div>
+          {/* Top Navigation/Header */}
+          <header className="border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex h-16 items-center justify-between">
                 <Link
-                  href="/school-education"
-                  className="nav-link hover:text-indigo-700"
+                  href="/"
+                  className="flex items-center gap-2 font-semibold text-indigo-700"
                 >
-                  School Education
+                  <i className="fa-solid fa-graduation-cap"></i>
+                  <span>EduCounsel</span>
                 </Link>
-                <Link
-                  href="/counselling"
-                  className="nav-link hover:text-indigo-700"
+                <button
+                  id="mobileMenuBtn"
+                  className="sm:hidden p-2 text-slate-600"
+                  aria-label="Open Menu"
                 >
-                  Child/Parent Counselling
-                </Link>
-                <Link
-                  href="/languages"
-                  className="nav-link hover:text-indigo-700"
-                >
-                  Languages
-                </Link>
-                <Link href="/about" className="nav-link hover:text-indigo-700">
-                  About Us
-                </Link>
-                <Link
-                  href="/contact"
-                  className="nav-link hover:text-indigo-700"
-                >
-                  Contact Us
-                </Link>
-                <Link href="/signin" className="nav-link hover:text-indigo-700">
-                  Sign-in
-                </Link>
-              </nav>
-            </div>
-            {/* Mobile menu (static, not functional in this snippet) */}
-            <nav id="mobileNav" className="sm:hidden hidden pb-4">
-              <ul className="flex flex-col gap-2">
-                <li>
-                  <Link
-                    className="block px-2 py-2 rounded hover:bg-indigo-50"
-                    href="/"
-                  >
+                  <i className="fa-solid fa-bars text-xl"></i>
+                </button>
+                <nav id="mainNav" className="hidden sm:flex gap-6">
+                  <Link href="/" className="nav-link hover:text-indigo-700">
                     Home
                   </Link>
-                </li>
-                <li>
                   <Link
-                    className="block px-2 py-2 rounded hover:bg-indigo-50"
                     href="/school-education"
+                    className="nav-link hover:text-indigo-700"
                   >
                     School Education
                   </Link>
-                </li>
-                <li>
                   <Link
-                    className="block px-2 py-2 rounded hover:bg-indigo-50"
                     href="/counselling"
+                    className="nav-link hover:text-indigo-700"
                   >
                     Child/Parent Counselling
                   </Link>
-                </li>
-                <li>
                   <Link
-                    className="block px-2 py-2 rounded hover:bg-indigo-50"
                     href="/languages"
+                    className="nav-link hover:text-indigo-700"
                   >
                     Languages
                   </Link>
-                </li>
-                <li>
                   <Link
-                    className="block px-2 py-2 rounded hover:bg-indigo-50"
                     href="/about"
+                    className="nav-link hover:text-indigo-700"
                   >
                     About Us
                   </Link>
-                </li>
-                <li>
                   <Link
-                    className="block px-2 py-2 rounded hover:bg-indigo-50"
                     href="/contact"
+                    className="nav-link hover:text-indigo-700"
                   >
                     Contact Us
                   </Link>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </header>
-        {children}
+                  {/* Show user's name if logged in, else show Sign-in */}
+                  <UserNav />
+                </nav>
+              </div>
+              {/* Mobile menu (static, not functional in this snippet) */}
+              <nav id="mobileNav" className="sm:hidden hidden pb-4">
+                <ul className="flex flex-col gap-2">
+                  <li>
+                    <Link
+                      className="block px-2 py-2 rounded hover:bg-indigo-50"
+                      href="/"
+                    >
+                      Home
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="block px-2 py-2 rounded hover:bg-indigo-50"
+                      href="/school-education"
+                    >
+                      School Education
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="block px-2 py-2 rounded hover:bg-indigo-50"
+                      href="/counselling"
+                    >
+                      Child/Parent Counselling
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="block px-2 py-2 rounded hover:bg-indigo-50"
+                      href="/languages"
+                    >
+                      Languages
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="block px-2 py-2 rounded hover:bg-indigo-50"
+                      href="/about"
+                    >
+                      About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="block px-2 py-2 rounded hover:bg-indigo-50"
+                      href="/contact"
+                    >
+                      Contact Us
+                    </Link>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </header>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

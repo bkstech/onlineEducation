@@ -3,10 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { login } from "@/lib/auth";
+import { login as apiLogin } from "@/lib/auth";
+import { useAuth } from "@/app/AuthContext";
 
 export default function SignIn() {
   const router = useRouter();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -16,9 +18,14 @@ export default function SignIn() {
     e.preventDefault();
     setError("");
     setLoading(true);
-    
     try {
-      await login({ email, password });
+      const data = await apiLogin({ email, password });
+      login({
+        firstname: data.firstname,
+        lastname: data.lastname,
+        email: data.email,
+        id: data.id,
+      });
       // Redirect to home page on successful login
       router.push("/");
     } catch (err: unknown) {
@@ -78,7 +85,12 @@ export default function SignIn() {
               onChange={(e) => setPassword(e.target.value)}
             />
             <div className="mt-2 text-right">
-              <Link href="/forgot-password" className="text-indigo-700 text-sm hover:underline">Forgot password?</Link>
+              <Link
+                href="/forgot-password"
+                className="text-indigo-700 text-sm hover:underline"
+              >
+                Forgot password?
+              </Link>
             </div>
           </div>
           {error && <p className="text-red-600 text-sm">{error}</p>}
@@ -110,8 +122,8 @@ export default function SignIn() {
             className="text-indigo-700 font-semibold hover:underline"
           >
             Student
-          </Link>
-          {" "}or as{" "}
+          </Link>{" "}
+          or as{" "}
           <Link
             href="/register-teacher"
             className="text-indigo-700 font-semibold hover:underline"
