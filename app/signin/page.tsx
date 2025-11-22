@@ -48,6 +48,19 @@ export default function SignIn() {
     <div className="min-h-screen flex items-center justify-center bg-slate-50">
       <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
         <h1 className="text-2xl font-bold text-center mb-6">Sign-in</h1>
+        <button
+          type="button"
+          onClick={handleGoogleSignIn}
+          className="w-full flex items-center justify-center gap-2 border border-slate-300 rounded-md py-2 mb-4 bg-white hover:bg-slate-100 shadow-sm"
+          style={{ fontWeight: 500 }}
+        >
+          <img
+            src="/img/google-icon.svg"
+            alt="Google"
+            style={{ width: 20, height: 20 }}
+          />
+          Sign in with Google
+        </button>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label
@@ -102,19 +115,6 @@ export default function SignIn() {
             {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
-        <div className="mt-6 flex flex-col items-center">
-          <button
-            onClick={handleGoogleSignIn}
-            className="flex items-center gap-2 bg-white border border-slate-300 rounded px-4 py-2 shadow hover:bg-slate-100 mt-2"
-          >
-            <img
-              src="https://www.svgrepo.com/show/475656/google-color.svg"
-              alt="Google"
-              className="w-5 h-5"
-            />
-            <span>Sign in with Google</span>
-          </button>
-        </div>
         <div className="mt-8 text-center text-sm text-slate-600">
           Not a member yet? Register now as{" "}
           <Link
