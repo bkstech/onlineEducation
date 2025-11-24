@@ -1,11 +1,11 @@
 // API Configuration
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://localhost:5000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 // Types
 export interface LoginRequest {
   email: string;
   password: string;
+  role?: "student" | "teacher";
 }
 
 export interface RegisterRequest {
@@ -29,18 +29,18 @@ export interface AuthResponse {
   firstname: string;
   lastname: string;
   id: number;
+  role?: "student" | "teacher";
 }
 
 // User info management (no JWT storage)
 const USER_KEY = "auth_user";
-
 export const saveUserInfo = (user: Omit<AuthResponse, "token">) => {
   if (typeof window !== "undefined") {
     localStorage.setItem(USER_KEY, JSON.stringify(user));
   }
 };
 
-export const getUserInfo = (): Omit<AuthResponse, "token"> | null => {
+export const getUserInfo = (): (Omit<AuthResponse, "token"> & { role?: "student" | "teacher" }) | null => {
   if (typeof window !== "undefined") {
     const user = localStorage.getItem(USER_KEY);
     return user ? JSON.parse(user) : null;
@@ -61,7 +61,10 @@ export const isAuthenticated = (): boolean => {
 
 // API Functions
 export const login = async (request: LoginRequest): Promise<AuthResponse> => {
-  const response = await fetch(`${API_BASE_URL}/api/Auth/Login`, {
+  const endpoint = request.role === "teacher"
+    ? `${API_BASE_URL}/api/Auth/login/teacher`
+    : `${API_BASE_URL}/api/Auth/Login`;
+  const response = await fetch(endpoint, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -85,6 +88,7 @@ export const login = async (request: LoginRequest): Promise<AuthResponse> => {
     firstname: data.firstname,
     lastname: data.lastname,
     id: data.id,
+    role: request.role,
   });
 
   return data;

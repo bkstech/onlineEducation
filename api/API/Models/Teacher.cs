@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace API.Models;
 
-public partial class Candidate
+public partial class Teacher
 {
     public int Id { get; set; }
 
@@ -16,6 +16,10 @@ public partial class Candidate
     public string Email { get; set; } = null!;
 
     public string? Phone { get; set; }
+
+    public string? Specializein { get; set; }
+
+    public sbyte Experience { get; set; }
 
     public string Address { get; set; } = null!;
 

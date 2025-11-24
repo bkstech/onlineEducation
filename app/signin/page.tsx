@@ -19,7 +19,14 @@ export default function SignIn() {
     setError("");
     setLoading(true);
     try {
-      const data = await apiLogin({ email, password });
+      let localRole = role;
+      if (typeof window !== "undefined") {
+        const userRole = localStorage.getItem("role");
+        if (userRole === "student" || userRole === "teacher") {
+          localRole = userRole;
+        }
+      }
+      const data = await apiLogin({ email, password, role: localRole });
       login({
         firstname: data.firstname,
         lastname: data.lastname,
@@ -44,10 +51,43 @@ export default function SignIn() {
     setError("Demo only: Google sign-in not implemented.");
   };
 
+  const [role, setRole] = useState<"student" | "teacher">(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("role") === "teacher") return "teacher";
+    }
+    return "student";
+  });
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50">
       <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
         <h1 className="text-2xl font-bold text-center mb-6">Sign-in</h1>
+        <div className="flex justify-center gap-4 mb-4">
+          <button
+            type="button"
+            className={`px-4 py-2 rounded border font-semibold ${role === "student" ? "bg-indigo-600 text-white" : "bg-white text-indigo-700 border-indigo-600"}`}
+            onClick={() => {
+              setRole("student");
+              if (typeof window !== "undefined") {
+                localStorage.setItem("role", "student");
+              }
+            }}
+          >
+            Student
+          </button>
+          <button
+            type="button"
+            className={`px-4 py-2 rounded border font-semibold ${role === "teacher" ? "bg-indigo-600 text-white" : "bg-white text-indigo-700 border-indigo-600"}`}
+            onClick={() => {
+              setRole("teacher");
+              if (typeof window !== "undefined") {
+                localStorage.setItem("role", "teacher");
+              }
+            }}
+          >
+            Teacher
+          </button>
+        </div>
         <button
           type="button"
           onClick={handleGoogleSignIn}

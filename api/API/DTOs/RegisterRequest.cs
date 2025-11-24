@@ -14,4 +14,6 @@ public class RegisterRequest
     public string Zip { get; set; } = null!;
     public DateTime Dob { get; set; }
     public string Password { get; set; } = null!;
+    public string? Specializein { get; set; }
+    public sbyte Experience { get; set; }
 }
