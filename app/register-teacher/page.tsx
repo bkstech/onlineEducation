@@ -42,28 +42,33 @@ export default function RegisterTeacher() {
     setError("");
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/auth/teacher/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          country,
-          phone,
-          experience: Number(experience),
-          specializein: specialize,
-          zip,
-          city,
-          state,
-          address,
-          lastname: lastName,
-          firstname: firstName,
-        }),
-      });
+      const response = await fetch(
+        "http://localhost:5000/api/auth/teacher/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+            country,
+            phone,
+            experience: Number(experience),
+            specializein: specialize,
+            zip,
+            city,
+            state,
+            address,
+            lastname: lastName,
+            firstname: firstName,
+          }),
+        }
+      );
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: "Registration failed" }));
+        const errorData = await response
+          .json()
+          .catch(() => ({ message: "Registration failed" }));
         throw new Error(errorData.message || "Registration failed");
       }
       setError("");
@@ -83,30 +88,40 @@ export default function RegisterTeacher() {
           Register as Teacher
         </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                      <label htmlFor="firstName" className="block text-sm font-medium text-slate-700">First Name</label>
-                      <input
-                        id="firstName"
-                        name="firstName"
-                        type="text"
-                        required
-                        className="mt-1 w-full rounded-md border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 bg-slate-100"
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="lastName" className="block text-sm font-medium text-slate-700">Last Name</label>
-                      <input
-                        id="lastName"
-                        name="lastName"
-                        type="text"
-                        required
-                        className="mt-1 w-full rounded-md border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 bg-slate-100"
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                      />
-                    </div>
+          <div>
+            <label
+              htmlFor="firstName"
+              className="block text-sm font-medium text-slate-700"
+            >
+              First Name
+            </label>
+            <input
+              id="firstName"
+              name="firstName"
+              type="text"
+              required
+              className="mt-1 w-full rounded-md border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 bg-slate-100"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="lastName"
+              className="block text-sm font-medium text-slate-700"
+            >
+              Last Name
+            </label>
+            <input
+              id="lastName"
+              name="lastName"
+              type="text"
+              required
+              className="mt-1 w-full rounded-md border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 bg-slate-100"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+          </div>
           <div>
             <label
               htmlFor="email"
@@ -202,7 +217,12 @@ export default function RegisterTeacher() {
             />
           </div>
           <div>
-            <label htmlFor="address" className="block text-sm font-medium text-slate-700">Address</label>
+            <label
+              htmlFor="address"
+              className="block text-sm font-medium text-slate-700"
+            >
+              Address
+            </label>
             <input
               id="address"
               name="address"
@@ -214,7 +234,12 @@ export default function RegisterTeacher() {
             />
           </div>
           <div>
-            <label htmlFor="city" className="block text-sm font-medium text-slate-700">City</label>
+            <label
+              htmlFor="city"
+              className="block text-sm font-medium text-slate-700"
+            >
+              City
+            </label>
             <input
               id="city"
               name="city"
@@ -226,7 +251,12 @@ export default function RegisterTeacher() {
             />
           </div>
           <div>
-            <label htmlFor="state" className="block text-sm font-medium text-slate-700">State</label>
+            <label
+              htmlFor="state"
+              className="block text-sm font-medium text-slate-700"
+            >
+              State
+            </label>
             <input
               id="state"
               name="state"
@@ -238,7 +268,12 @@ export default function RegisterTeacher() {
             />
           </div>
           <div>
-            <label htmlFor="zip" className="block text-sm font-medium text-slate-700">Zip Code / Pin Code</label>
+            <label
+              htmlFor="zip"
+              className="block text-sm font-medium text-slate-700"
+            >
+              Zip Code / Pin Code
+            </label>
             <input
               id="zip"
               name="zip"
@@ -250,7 +285,12 @@ export default function RegisterTeacher() {
             />
           </div>
           <div>
-            <label htmlFor="specialize" className="block text-sm font-medium text-slate-700">Specialize In</label>
+            <label
+              htmlFor="specialize"
+              className="block text-sm font-medium text-slate-700"
+            >
+              Specialize In
+            </label>
             <input
               id="specialize"
               name="specialize"

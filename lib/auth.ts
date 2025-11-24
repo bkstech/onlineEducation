@@ -40,7 +40,9 @@ export const saveUserInfo = (user: Omit<AuthResponse, "token">) => {
   }
 };
 
-export const getUserInfo = (): (Omit<AuthResponse, "token"> & { role?: "student" | "teacher" }) | null => {
+export const getUserInfo = ():
+  | (Omit<AuthResponse, "token"> & { role?: "student" | "teacher" })
+  | null => {
   if (typeof window !== "undefined") {
     const user = localStorage.getItem(USER_KEY);
     return user ? JSON.parse(user) : null;
@@ -61,9 +63,10 @@ export const isAuthenticated = (): boolean => {
 
 // API Functions
 export const login = async (request: LoginRequest): Promise<AuthResponse> => {
-  const endpoint = request.role === "teacher"
-    ? `${API_BASE_URL}/api/Auth/login/teacher`
-    : `${API_BASE_URL}/api/Auth/Login`;
+  const endpoint =
+    request.role === "teacher"
+      ? `${API_BASE_URL}/api/Auth/login/teacher`
+      : `${API_BASE_URL}/api/Auth/Login`;
   const response = await fetch(endpoint, {
     method: "POST",
     headers: {

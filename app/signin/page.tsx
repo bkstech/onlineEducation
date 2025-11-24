@@ -65,7 +65,11 @@ export default function SignIn() {
         <div className="flex justify-center gap-4 mb-4">
           <button
             type="button"
-            className={`px-4 py-2 rounded border font-semibold ${role === "student" ? "bg-indigo-600 text-white" : "bg-white text-indigo-700 border-indigo-600"}`}
+            className={`px-4 py-2 rounded border font-semibold ${
+              role === "student"
+                ? "bg-indigo-600 text-white"
+                : "bg-white text-indigo-700 border-indigo-600"
+            }`}
             onClick={() => {
               setRole("student");
               if (typeof window !== "undefined") {
@@ -77,7 +81,11 @@ export default function SignIn() {
           </button>
           <button
             type="button"
-            className={`px-4 py-2 rounded border font-semibold ${role === "teacher" ? "bg-indigo-600 text-white" : "bg-white text-indigo-700 border-indigo-600"}`}
+            className={`px-4 py-2 rounded border font-semibold ${
+              role === "teacher"
+                ? "bg-indigo-600 text-white"
+                : "bg-white text-indigo-700 border-indigo-600"
+            }`}
             onClick={() => {
               setRole("teacher");
               if (typeof window !== "undefined") {
