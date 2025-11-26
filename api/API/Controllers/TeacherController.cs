@@ -18,14 +18,14 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Teacher>>> GetTeachers()
         {
-            return await _context.Teachers.ToListAsync();
+            return await _context.Teacher.ToListAsync();
         }
 
         // GET: api/teachers/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<Teacher>> GetTeacher(int id)
         {
-            var teacher = await _context.Teachers.FindAsync(id);
+            var teacher = await _context.Teacher.FindAsync(id);
             if (teacher == null)
                 return NotFound();
             return teacher;
@@ -35,7 +35,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Teacher>> PostTeacher(Teacher teacher)
         {
-            _context.Teachers.Add(teacher);
+            _context.Teacher.Add(teacher);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetTeacher), new { id = teacher.Id }, teacher);
         }
@@ -65,17 +65,17 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTeacher(int id)
         {
-            var teacher = await _context.Teachers.FindAsync(id);
+            var teacher = await _context.Teacher.FindAsync(id);
             if (teacher == null)
                 return NotFound();
-            _context.Teachers.Remove(teacher);
+            _context.Teacher.Remove(teacher);
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
         private bool TeacherExists(int id)
         {
-            return _context.Teachers.Any(e => e.Id == id);
+            return _context.Teacher.Any(e => e.Id == id);
         }
     }
 }

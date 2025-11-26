@@ -16,7 +16,7 @@ public partial class EstudydbContext : DbContext
     {
     }
 
-    public virtual DbSet<Teacher> Teachers { get; set; }
+    public virtual DbSet<Teacher> Teacher { get; set; }
     public virtual DbSet<Candidate> Candidates { get; set; }
     public virtual DbSet<Teachercandidate> Teachercandidates { get; set; }
 
@@ -34,7 +34,7 @@ public partial class EstudydbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("teachers");
+            entity.ToTable("teacher");
         });
 
         modelBuilder.Entity<Candidate>(entity =>

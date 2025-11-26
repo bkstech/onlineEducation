@@ -19,7 +19,7 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<AuthResponse>> LoginTeacher([FromBody] LoginRequest request)
     {
         // Find teacher by email
-        var teacher = await _context.Teachers
+        var teacher = await _context.Teacher
             .FirstOrDefaultAsync(t => t.Email == request.Email && !t.IsDeleted);
 
         if (teacher == null)
@@ -107,14 +107,14 @@ public class AuthController : ControllerBase
         public async Task<ActionResult<AuthResponse>> RegisterTeacher([FromBody] RegisterRequest request)
         {
             // Check if email already exists
-            if (await _context.Teachers.AnyAsync(t => t.Email == request.Email))
+            if (await _context.Teacher.AnyAsync(t => t.Email == request.Email))
             {
                 return BadRequest(new { message = "Email already registered" });
             }
 
             // Check if phone already exists (if provided)
             if (!string.IsNullOrEmpty(request.Phone) &&
-                await _context.Teachers.AnyAsync(t => t.Phone == request.Phone))
+                await _context.Teacher.AnyAsync(t => t.Phone == request.Phone))
             {
                 return BadRequest(new { message = "Phone number already registered" });
             }
@@ -151,7 +151,7 @@ public class AuthController : ControllerBase
                 Experience = request.Experience
             };
 
-            _context.Teachers.Add(teacher);
+            _context.Teacher.Add(teacher);
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Teacher registered successfully" });
