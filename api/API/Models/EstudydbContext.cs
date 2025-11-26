@@ -19,6 +19,12 @@ public partial class EstudydbContext : DbContext
     public virtual DbSet<Teacher> Teacher { get; set; }
     public virtual DbSet<Candidate> Candidates { get; set; }
     public virtual DbSet<Teachercandidate> Teachercandidates { get; set; }
+    public virtual DbSet<Course> Courses { get; set; }
+    public virtual DbSet<Enrollment> Enrollments { get; set; }
+    public virtual DbSet<Payment> Payments { get; set; }
+    public virtual DbSet<Topic> Topics { get; set; }
+    public virtual DbSet<StudentProgress> StudentProgress { get; set; }
+    public virtual DbSet<CourseInvite> CourseInvites { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -51,6 +57,48 @@ public partial class EstudydbContext : DbContext
             entity.ToTable("teachercandidates");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+        });
+
+        modelBuilder.Entity<Course>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("courses");
+        });
+
+        modelBuilder.Entity<Enrollment>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("enrollments");
+        });
+
+        modelBuilder.Entity<Payment>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("payments");
+        });
+
+        modelBuilder.Entity<Topic>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("topics");
+        });
+
+        modelBuilder.Entity<StudentProgress>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("student_progress");
+        });
+
+        modelBuilder.Entity<CourseInvite>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("course_invites");
         });
 
         OnModelCreatingPartial(modelBuilder);
