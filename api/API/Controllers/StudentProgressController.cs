@@ -116,7 +116,8 @@ public class StudentProgressController : ControllerBase
 
         var totalTopics = performance.Count;
         var completedTopics = performance.Count(p => p.Status == "Completed");
-        var averageScore = performance.Where(p => p.Score.HasValue).Average(p => p.Score);
+        var scoresWithValue = performance.Where(p => p.Score.HasValue).ToList();
+        var averageScore = scoresWithValue.Any() ? scoresWithValue.Average(p => p.Score) : null;
 
         return Ok(new
         {
