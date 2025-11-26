@@ -81,6 +81,10 @@ export default function InvitePage() {
         successMessage += ` Note: ${result.invalidEmails.length} email(s) were skipped due to invalid format.`;
       }
       
+      if (result.duplicateEmails && result.duplicateEmails.length > 0) {
+        successMessage += ` ${result.duplicateEmails.length} email(s) were skipped because they already exist.`;
+      }
+      
       setSuccess(successMessage);
       setEmails([]);
     } catch (err: unknown) {

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using api.Models;
 using API.DTOs;
+using System.Text.RegularExpressions;
 
 namespace API.Controllers;
 
@@ -9,6 +11,8 @@ namespace API.Controllers;
 public class TeacherCandidatesController : ControllerBase
 {
     private readonly EstudydbContext _context;
+    private static readonly Regex EmailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.Compiled);
+    
     public TeacherCandidatesController(EstudydbContext context)
     {
         _context = context;
@@ -41,16 +45,21 @@ public class TeacherCandidatesController : ControllerBase
 
         var addedCandidates = new List<int>();
         var invalidEmails = new List<string>();
-        
-        // Simple email validation regex
-        var emailRegex = new System.Text.RegularExpressions.Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+        var duplicateEmails = new List<string>();
 
         foreach (var email in request.Emails)
         {
             // Validate email format
-            if (string.IsNullOrWhiteSpace(email) || !emailRegex.IsMatch(email))
+            if (string.IsNullOrWhiteSpace(email) || !EmailRegex.IsMatch(email))
             {
                 invalidEmails.Add(email ?? "empty");
+                continue;
+            }
+
+            // Check if email already exists in database
+            if (await _context.Candidates.AnyAsync(c => c.Email == email))
+            {
+                duplicateEmails.Add(email);
                 continue;
             }
 
@@ -100,7 +109,8 @@ public class TeacherCandidatesController : ControllerBase
         {
             message = $"{addedCandidates.Count} candidate(s) added successfully.",
             candidateIds = addedCandidates,
-            invalidEmails = invalidEmails.Count > 0 ? invalidEmails : null
+            invalidEmails = invalidEmails.Count > 0 ? invalidEmails : null,
+            duplicateEmails = duplicateEmails.Count > 0 ? duplicateEmails : null
         };
 
         return Ok(result);
