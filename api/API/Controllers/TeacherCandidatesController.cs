@@ -40,12 +40,19 @@ public class TeacherCandidatesController : ControllerBase
             return BadRequest(new { message = "Emails array is required." });
 
         var addedCandidates = new List<int>();
+        var invalidEmails = new List<string>();
+        
+        // Simple email validation regex
+        var emailRegex = new System.Text.RegularExpressions.Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
 
         foreach (var email in request.Emails)
         {
-            // Check if email is valid
-            if (string.IsNullOrWhiteSpace(email))
+            // Validate email format
+            if (string.IsNullOrWhiteSpace(email) || !emailRegex.IsMatch(email))
+            {
+                invalidEmails.Add(email ?? "empty");
                 continue;
+            }
 
             // Create a new candidate with only email and default values for required fields
             var candidate = new Candidate
@@ -58,7 +65,7 @@ public class TeacherCandidatesController : ControllerBase
                 State = "Pending",
                 Country = "Pending",
                 Zip = "00000",
-                Dob = DateTime.UtcNow,
+                Dob = new DateTime(1900, 1, 1), // Use a clear placeholder date
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 IsActive = true,
@@ -74,7 +81,7 @@ public class TeacherCandidatesController : ControllerBase
             _context.Candidates.Add(candidate);
             await _context.SaveChangesAsync();
 
-            // Get the inserted candidate Id
+            // Get the inserted candidate Id (auto-generated identity column)
             var candidateId = candidate.Id;
             addedCandidates.Add(candidateId);
 
@@ -88,6 +95,14 @@ public class TeacherCandidatesController : ControllerBase
         }
 
         await _context.SaveChangesAsync();
-        return Ok(new { message = $"{addedCandidates.Count} candidate(s) added successfully.", candidateIds = addedCandidates });
+        
+        var result = new
+        {
+            message = $"{addedCandidates.Count} candidate(s) added successfully.",
+            candidateIds = addedCandidates,
+            invalidEmails = invalidEmails.Count > 0 ? invalidEmails : null
+        };
+
+        return Ok(result);
     }
 }

@@ -75,7 +75,13 @@ export default function InvitePage() {
       }
 
       const result = await response.json();
-      setSuccess(result.message || "Invitations sent successfully!");
+      let successMessage = result.message || "Invitations sent successfully!";
+      
+      if (result.invalidEmails && result.invalidEmails.length > 0) {
+        successMessage += ` Note: ${result.invalidEmails.length} email(s) were skipped due to invalid format.`;
+      }
+      
+      setSuccess(successMessage);
       setEmails([]);
     } catch (err: unknown) {
       if (err instanceof Error) {
