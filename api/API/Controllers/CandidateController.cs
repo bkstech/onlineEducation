@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using API.Models;
+using api.Models;
 using BCrypt.Net;
 
 namespace CandidateApi.Controllers
