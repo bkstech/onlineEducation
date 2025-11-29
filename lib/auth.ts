@@ -41,7 +41,7 @@ export const saveUserInfo = (user: Omit<AuthResponse, "token">) => {
     return;
   }
   // Ensure role is present, fallback to null if missing
-  if (!('role' in user)) {
+  if (!("role" in user)) {
     user.role = null;
   }
   console.log("Saving user info:", user);
