@@ -49,7 +49,7 @@ public class AuthController : ControllerBase
             HttpOnly = true,
             Secure = true,
             SameSite = SameSiteMode.Strict,
-            Expires = DateTimeOffset.UtcNow.AddMinutes(60)
+            Expires = DateTimeOffset.UtcNow.AddMinutes(1440)
         });
 
         return Ok(new AuthResponse
@@ -170,7 +170,7 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<AuthResponse>> Login(LoginRequest request)
     {
         // Find candidate by email
-            var candidate = await _context.Candidates
+            var candidate = await _context.Candidate
             .FirstOrDefaultAsync(c => c.Email == request.Email && !c.IsDeleted);
 
         if (candidate == null)
@@ -218,14 +218,14 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<AuthResponse>> Register(RegisterRequest request)
     {
         // Check if email already exists
-        if (await _context.Candidates.AnyAsync(c => c.Email == request.Email))
+        if (await _context.Candidate.AnyAsync(c => c.Email == request.Email))
         {
             return BadRequest(new { message = "Email already registered" });
         }
 
         // Check if phone already exists (if provided)
         if (!string.IsNullOrEmpty(request.Phone) && 
-            await _context.Candidates.AnyAsync(c => c.Phone == request.Phone))
+            await _context.Candidate.AnyAsync(c => c.Phone == request.Phone))
         {
             return BadRequest(new { message = "Phone number already registered" });
         }
@@ -260,7 +260,7 @@ public class AuthController : ControllerBase
             Status = "Registered"
         };
 
-        _context.Candidates.Add(candidate);
+        _context.Candidate.Add(candidate);
         await _context.SaveChangesAsync();
 
         // Generate JWT token
@@ -281,7 +281,8 @@ public class AuthController : ControllerBase
             Email = candidate.Email,
             Firstname = candidate.Firstname,
             Lastname = candidate.Lastname,
-            Id = candidate.Id
+            Id = candidate.Id,
+            Role = "candidate"
         });
     }
 

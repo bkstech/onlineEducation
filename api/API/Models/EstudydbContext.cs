@@ -17,7 +17,7 @@ public partial class EstudydbContext : DbContext
     }
 
     public virtual DbSet<Teacher> Teacher { get; set; }
-    public virtual DbSet<Candidate> Candidates { get; set; }
+    public virtual DbSet<Candidate> Candidate { get; set; }
     public virtual DbSet<Teachercandidate> Teachercandidates { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -40,8 +40,7 @@ public partial class EstudydbContext : DbContext
         modelBuilder.Entity<Candidate>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("candidates");
+            entity.ToTable("candidate");
         });
 
         modelBuilder.Entity<Teachercandidate>(entity =>

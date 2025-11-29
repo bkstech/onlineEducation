@@ -36,6 +36,15 @@ export interface AuthResponse {
 // User info management (no JWT storage)
 const USER_KEY = "auth_user";
 export const saveUserInfo = (user: Omit<AuthResponse, "token">) => {
+  if (!user) {
+    console.error("saveUserInfo called with undefined user:", user);
+    return;
+  }
+  // Ensure role is present, fallback to null if missing
+  if (!('role' in user)) {
+    user.role = null;
+  }
+  console.log("Saving user info:", user);
   if (typeof window !== "undefined") {
     localStorage.setItem(USER_KEY, JSON.stringify(user));
   }
@@ -92,9 +101,10 @@ export const login = async (request: LoginRequest): Promise<AuthResponse> => {
     firstname: data.firstname,
     lastname: data.lastname,
     id: data.id,
-    role: request.role,
+    role: data.role ?? null,
   });
-
+  console.log("Logged in user role:", data.role);
+  console.log("email:", data.email);
   return data;
 };
 
@@ -125,6 +135,7 @@ export const register = async (
     firstname: data.firstname,
     lastname: data.lastname,
     id: data.id,
+    role: data.role ?? null,
   });
 
   return data;

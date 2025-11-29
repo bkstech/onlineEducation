@@ -32,6 +32,7 @@ export default function SignIn() {
         lastname: data.lastname,
         email: data.email,
         id: data.id,
+        role: data.role,
       });
       // Redirect to home page on successful login
       router.push("/");

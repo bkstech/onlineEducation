@@ -57,7 +57,7 @@ public class TeacherCandidatesController : ControllerBase
             }
 
             // Check if email already exists in database
-            if (await _context.Candidates.AnyAsync(c => c.Email == email))
+            if (await _context.Candidate.AnyAsync(c => c.Email == email))
             {
                 duplicateEmails.Add(email);
                 continue;
@@ -84,10 +84,10 @@ public class TeacherCandidatesController : ControllerBase
                 IsBlocked = false,
                 CreatedBy = "Teacher",
                 UpdatedBy = "Teacher",
-                Status = "Invited"
+                Status = "Registered"
             };
 
-            _context.Candidates.Add(candidate);
+            _context.Candidate.Add(candidate);
             await _context.SaveChangesAsync();
 
             // Get the inserted candidate Id (auto-generated identity column)
