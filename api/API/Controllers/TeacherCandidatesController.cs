@@ -36,19 +36,27 @@ public class TeacherCandidatesController : ControllerBase
     [HttpPost("addcandidateemails")]
     public async Task<IActionResult> AddCandidateEmails([FromBody] CandidateEmailRequest request)
     {
+        if (request == null)
+            return BadRequest(new { message = "Request body is required." });
+
         if (request.Emails == null || request.Emails.Count == 0)
             return BadRequest(new { message = "Emails array is required." });
 
+        // Validate email format
+        var emailRegex = new System.Text.RegularExpressions.Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
         foreach (var email in request.Emails)
         {
-            var invitedCandidate = new InvitedCandidate
-            {
-                TeacherId = request.TeacherId,
-                Email = email,
-                CreatedAt = DateTime.UtcNow
-            };
-            _context.InvitedCandidates.Add(invitedCandidate);
+            if (string.IsNullOrWhiteSpace(email) || !emailRegex.IsMatch(email))
+                return BadRequest(new { message = $"Invalid email format: {email}" });
         }
+
+        var invitedCandidates = request.Emails.Select(email => new InvitedCandidate
+        {
+            TeacherId = request.TeacherId,
+            Email = email
+        }).ToList();
+
+        _context.InvitedCandidates.AddRange(invitedCandidates);
         await _context.SaveChangesAsync();
         return Ok(new { message = "Candidate emails invited successfully." });
     }
