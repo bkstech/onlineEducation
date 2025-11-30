@@ -43,10 +43,8 @@ public class TeacherCandidatesController : ControllerBase
         if (request.Emails == null || request.Emails.Count == 0)
             return BadRequest(new { message = "Emails array is required." });
 
-        var addedCandidates = new List<int>();
+        var invitedCount = 0;
         var invalidEmails = new List<string>();
-        var duplicateEmails = new List<string>();
-
         foreach (var email in request.Emails)
         {
             // Validate email format
@@ -55,64 +53,20 @@ public class TeacherCandidatesController : ControllerBase
                 invalidEmails.Add(email ?? "empty");
                 continue;
             }
-
-            // Check if email already exists in database
-            if (await _context.Candidates.AnyAsync(c => c.Email == email))
-            {
-                duplicateEmails.Add(email);
-                continue;
-            }
-
-            // Create a new candidate with only email and default values for required fields
-            var candidate = new Candidate
-            {
-                Email = email,
-                Firstname = "Pending",
-                Lastname = "Pending",
-                Address = "Pending",
-                City = "Pending",
-                State = "Pending",
-                Country = "Pending",
-                Zip = "00000",
-                Dob = new DateTime(1900, 1, 1), // Use a clear placeholder date
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
-                IsActive = true,
-                IsDeleted = false,
-                IsArchived = false,
-                IsVerified = false,
-                IsBlocked = false,
-                CreatedBy = "Teacher",
-                UpdatedBy = "Teacher",
-                Status = "Registered"
-            };
-
-            _context.Candidates.Add(candidate);
-            await _context.SaveChangesAsync();
-
-            // Get the inserted candidate Id (auto-generated identity column)
-            var candidateId = candidate.Id;
-            addedCandidates.Add(candidateId);
-
-            // Create the teacher-candidate relationship
-            var teacherCandidate = new Teachercandidate
+            var invited = new Invitedcandidate
             {
                 TeacherId = request.TeacherId,
-                CandidateId = candidateId
+                CandidateEmail = email
             };
-            _context.Teachercandidates.Add(teacherCandidate);
+            _context.Invitedcandidates.Add(invited);
+            invitedCount++;
         }
-
         await _context.SaveChangesAsync();
-        
         var result = new
         {
-            message = $"{addedCandidates.Count} candidate(s) added successfully.",
-            candidateIds = addedCandidates,
-            invalidEmails = invalidEmails.Count > 0 ? invalidEmails : null,
-            duplicateEmails = duplicateEmails.Count > 0 ? duplicateEmails : null
+            message = $"{invitedCount} invitation(s) saved successfully.",
+            invalidEmails = invalidEmails.Count > 0 ? invalidEmails : null
         };
-
         return Ok(result);
     }
 }
