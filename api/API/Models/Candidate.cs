@@ -1,37 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace api.Models;
+namespace Api.Models;
 
 public partial class Candidate
 {
     public int Id { get; set; }
 
-    public string Firstname { get; set; } = null!;
+    public string? Firstname { get; set; }
 
     public string? Middlename { get; set; }
 
-    public string Lastname { get; set; } = null!;
+    public string? Lastname { get; set; }
 
     public string Email { get; set; } = null!;
 
     public string? Phone { get; set; }
 
-    public string Address { get; set; } = null!;
+    public string? Address { get; set; }
 
-    public string City { get; set; } = null!;
+    public string? City { get; set; }
 
-    public string State { get; set; } = null!;
+    public string? State { get; set; }
 
-    public string Country { get; set; } = null!;
+    public string? Country { get; set; }
 
-    public string Zip { get; set; } = null!;
+    public string? Zip { get; set; }
 
-    public DateTime Dob { get; set; }
+    public DateTime? Dob { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+    public DateTime? CreatedAt { get; set; }
 
-    public DateTime UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
     public DateTime? DeletedAt { get; set; }
 
