@@ -19,6 +19,7 @@ public partial class EstudydbContext : DbContext
     public virtual DbSet<Teacher> Teacher { get; set; }
     public virtual DbSet<Candidate> Candidates { get; set; }
     public virtual DbSet<Teachercandidate> Teachercandidates { get; set; }
+    public virtual DbSet<InvitedCandidate> InvitedCandidates { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -51,6 +52,16 @@ public partial class EstudydbContext : DbContext
             entity.ToTable("teachercandidates");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+        });
+
+        modelBuilder.Entity<InvitedCandidate>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("invitedcandidate");
+
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
 
         OnModelCreatingPartial(modelBuilder);
