@@ -4,7 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using api.Models;
+using Api.Models;
 using API.DTOs;
 using BCrypt.Net;
 
@@ -19,7 +19,7 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<AuthResponse>> LoginTeacher([FromBody] LoginRequest request)
     {
         // Find teacher by email
-        var teacher = await _context.Teacher
+        var teacher = await _context.Teachers
             .FirstOrDefaultAsync(t => t.Email == request.Email && !t.IsDeleted);
 
         if (teacher == null)
@@ -107,14 +107,14 @@ public class AuthController : ControllerBase
         public async Task<ActionResult<AuthResponse>> RegisterTeacher([FromBody] RegisterRequest request)
         {
             // Check if email already exists
-            if (await _context.Teacher.AnyAsync(t => t.Email == request.Email))
+            if (await _context.Teachers.AnyAsync(t => t.Email == request.Email))
             {
                 return BadRequest(new { message = "Email already registered" });
             }
 
             // Check if phone already exists (if provided)
             if (!string.IsNullOrEmpty(request.Phone) &&
-                await _context.Teacher.AnyAsync(t => t.Phone == request.Phone))
+                await _context.Teachers.AnyAsync(t => t.Phone == request.Phone))
             {
                 return BadRequest(new { message = "Phone number already registered" });
             }
@@ -151,7 +151,7 @@ public class AuthController : ControllerBase
                 Experience = request.Experience
             };
 
-            _context.Teacher.Add(teacher);
+            _context.Teachers.Add(teacher);
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Teacher registered successfully" });
@@ -170,7 +170,7 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<AuthResponse>> Login(LoginRequest request)
     {
         // Find candidate by email
-            var candidate = await _context.Candidate
+            var candidate = await _context.Candidates
             .FirstOrDefaultAsync(c => c.Email == request.Email && !c.IsDeleted);
 
         if (candidate == null)
@@ -207,8 +207,8 @@ public class AuthController : ControllerBase
         {
             Token = token,
             Email = candidate.Email,
-            Firstname = candidate.Firstname,
-            Lastname = candidate.Lastname,
+            Firstname = candidate.Firstname ?? string.Empty,
+            Lastname = candidate.Lastname ?? string.Empty,
             Id = candidate.Id
         });
     }
@@ -218,14 +218,14 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<AuthResponse>> Register(RegisterRequest request)
     {
         // Check if email already exists
-        if (await _context.Candidate.AnyAsync(c => c.Email == request.Email))
+        if (await _context.Candidates.AnyAsync(c => c.Email == request.Email))
         {
             return BadRequest(new { message = "Email already registered" });
         }
 
         // Check if phone already exists (if provided)
         if (!string.IsNullOrEmpty(request.Phone) && 
-            await _context.Candidate.AnyAsync(c => c.Phone == request.Phone))
+            await _context.Candidates.AnyAsync(c => c.Phone == request.Phone))
         {
             return BadRequest(new { message = "Phone number already registered" });
         }
@@ -260,7 +260,7 @@ public class AuthController : ControllerBase
             Status = "Registered"
         };
 
-        _context.Candidate.Add(candidate);
+        _context.Candidates.Add(candidate);
         await _context.SaveChangesAsync();
 
         // Generate JWT token
@@ -306,8 +306,8 @@ public class AuthController : ControllerBase
             new Claim(JwtRegisteredClaimNames.Sub, candidate.Email),
             new Claim(JwtRegisteredClaimNames.Email, candidate.Email),
             new Claim("id", candidate.Id.ToString()),
-            new Claim("firstname", candidate.Firstname),
-            new Claim("lastname", candidate.Lastname),
+            new Claim("firstname", candidate.Firstname ?? string.Empty),
+            new Claim("lastname", candidate.Lastname ?? string.Empty),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 

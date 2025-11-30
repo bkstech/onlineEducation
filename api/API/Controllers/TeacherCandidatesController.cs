@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using api.Models;
+using Api.Models;
 using API.DTOs;
 using System.Text.RegularExpressions;
 
@@ -57,7 +57,7 @@ public class TeacherCandidatesController : ControllerBase
             }
 
             // Check if email already exists in database
-            if (await _context.Candidate.AnyAsync(c => c.Email == email))
+            if (await _context.Candidates.AnyAsync(c => c.Email == email))
             {
                 duplicateEmails.Add(email);
                 continue;
@@ -87,7 +87,7 @@ public class TeacherCandidatesController : ControllerBase
                 Status = "Registered"
             };
 
-            _context.Candidate.Add(candidate);
+            _context.Candidates.Add(candidate);
             await _context.SaveChangesAsync();
 
             // Get the inserted candidate Id (auto-generated identity column)

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using api.Models;
+using Api.Models;
 using BCrypt.Net;
 
 namespace CandidateApi.Controllers
@@ -19,14 +19,14 @@ namespace CandidateApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Candidate>>> GetCandidates()
             {
-                return await _context.Candidate.ToListAsync();
+                 return await _context.Candidates.ToListAsync();
         }
 
         // GET: api/Candidates/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Candidate>> GetCandidate(int id)
             {
-                var candidate = await _context.Candidate.FindAsync(id);
+                    var candidate = await _context.Candidates.FindAsync(id);
             if (candidate == null)
                 return NotFound();
             return candidate;
@@ -40,7 +40,7 @@ namespace CandidateApi.Controllers
             {
                 candidate.Userpassword = BCrypt.Net.BCrypt.HashPassword(candidate.Userpassword);
             }
-                _context.Candidate.Add(candidate);
+                _context.Candidates.Add(candidate);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetCandidate), new { id = candidate.Id }, candidate);
         }
@@ -62,7 +62,7 @@ namespace CandidateApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Candidate.Any(e => e.Id == id))
+                    if (!_context.Candidates.Any(e => e.Id == id))
                     return NotFound();
                 else
                     throw;
@@ -74,10 +74,10 @@ namespace CandidateApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCandidate(int id)
         {
-            var candidate = await _context.Candidate.FindAsync(id);
+            var candidate = await _context.Candidates.FindAsync(id);
             if (candidate == null)
                 return NotFound();
-            _context.Candidate.Remove(candidate);
+            _context.Candidates.Remove(candidate);
             await _context.SaveChangesAsync();
             return NoContent();
         }
