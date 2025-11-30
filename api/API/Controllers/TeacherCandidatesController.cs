@@ -32,4 +32,24 @@ public class TeacherCandidatesController : ControllerBase
         await _context.SaveChangesAsync();
         return Ok(new { message = "Records inserted successfully." });
     }
+
+    [HttpPost("addcandidateemails")]
+    public async Task<IActionResult> AddCandidateEmails([FromBody] CandidateEmailRequest request)
+    {
+        if (request.Emails == null || request.Emails.Count == 0)
+            return BadRequest(new { message = "Emails array is required." });
+
+        foreach (var email in request.Emails)
+        {
+            var invitedCandidate = new InvitedCandidate
+            {
+                TeacherId = request.TeacherId,
+                Email = email,
+                CreatedAt = DateTime.UtcNow
+            };
+            _context.InvitedCandidates.Add(invitedCandidate);
+        }
+        await _context.SaveChangesAsync();
+        return Ok(new { message = "Candidate emails invited successfully." });
+    }
 }
