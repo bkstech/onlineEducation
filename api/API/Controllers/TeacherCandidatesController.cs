@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Api.Models;
 using API.DTOs;
 using System.Text.RegularExpressions;
+using Api.Notification.Controllers;
+using Api.Notification.DTOs;
 
 namespace API.Controllers;
 
@@ -67,6 +69,15 @@ public class TeacherCandidatesController : ControllerBase
             message = $"{invitedCount} invitation(s) saved successfully.",
             invalidEmails = invalidEmails.Count > 0 ? invalidEmails : null
         };
+        EmailRequest emailRequest = new EmailRequest
+        {
+            Subject = "You are invited!",
+            Body = "You have been invited by a teacher. Please register to join.",
+            To = "vishal_varshney@hotmail.com"
+        };
+        NotificationControllers notification = new NotificationControllers();
+        notification.SendEmail(emailRequest); 
         return Ok(result);
+
     }
 }
