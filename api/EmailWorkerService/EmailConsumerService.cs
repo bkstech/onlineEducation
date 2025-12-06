@@ -156,7 +156,8 @@ public class EmailConsumerService : BackgroundService
         try
         {
             var smtpHost = _configuration["Smtp:Host"] ?? "smtp.sendgrid.net";
-            var smtpPort = int.Parse(_configuration["Smtp:Port"] ?? "587");
+            var smtpPortStr = _configuration["Smtp:Port"] ?? "587";
+            var smtpPort = int.TryParse(smtpPortStr, out var port) ? port : 587;
             var smtpUserName = _configuration["Smtp:UserName"] ?? "apikey";
             var smtpPassword = _configuration["Smtp:Password"] ?? "";
 
