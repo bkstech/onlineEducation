@@ -44,3 +44,5 @@ next-env.d.ts
 /api/.vs/
 /api/API/bin/
 /api/API/obj/
+/api/EmailWorkerService/bin/
+/api/EmailWorkerService/obj/
