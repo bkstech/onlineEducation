@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
+using System;
+using System.Collections.Generic;
 
 namespace Api.Models;
 
@@ -20,7 +20,8 @@ public partial class EstudydbContext : DbContext
 
     public virtual DbSet<Efmigrationshistory> Efmigrationshistories { get; set; }
 
-    public virtual DbSet<Invitedcandidate> Invitedcandidates { get; set; }
+    // Keep a single DbSet for invited candidates (name matches existing usage in controllers)
+    public virtual DbSet<InvitedCandidate> Invitedcandidates { get; set; }
 
     public virtual DbSet<PrismaMigration> PrismaMigrations { get; set; }
 
@@ -125,13 +126,20 @@ public partial class EstudydbContext : DbContext
             entity.Property(e => e.ProductVersion).HasMaxLength(32);
         });
 
-        modelBuilder.Entity<Invitedcandidate>(entity =>
+        // Corrected mapping for InvitedCandidate (use the actual CLR type and property names)
+        modelBuilder.Entity<InvitedCandidate>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
             entity.ToTable("invitedcandidate", tb => tb.HasComment("Invited candidate email address and teacherid of teacher of invited those candidates."));
 
-            entity.Property(e => e.CandidateEmail).HasMaxLength(100);
+            // Map CLR Email property to DB column (scaffold previously used CandidateEmail)
+            entity.Property(e => e.Email)
+                .HasMaxLength(100)
+                .HasColumnName("candidateEmail");
+
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
 
         modelBuilder.Entity<PrismaMigration>(entity =>

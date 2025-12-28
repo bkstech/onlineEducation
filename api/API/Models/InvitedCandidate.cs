@@ -1,6 +1,6 @@
 using System;
 
-namespace Api.Models;
+namespace api.Models;
 
 public partial class InvitedCandidate
 {
@@ -11,5 +11,4 @@ public partial class InvitedCandidate
     public string Email { get; set; } = null!;
 
     public DateTime CreatedAt { get; set; }
- 
 }
