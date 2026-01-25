@@ -11,5 +11,4 @@ public partial class InvitedCandidate
     public string Email { get; set; } = null!;
 
     public DateTime CreatedAt { get; set; }
- 
 }
