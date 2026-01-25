@@ -30,7 +30,7 @@ const Contact = () => {
     e.preventDefault();
     setFormMsg("");
     setError("");
-    if (parseInt(captchaInput) !== (num1 ?? 0) + (num2 ?? 0)) {
+    if (parseInt(captchaInput) !== answer) {
       setError("Incorrect captcha answer. Please try again.");
       return;
     }
@@ -51,6 +51,7 @@ const Contact = () => {
       setCaptchaInput("");
       refreshCaptcha();
     } catch (err) {
+      console.error("Email send failed:", err);
       setFormMsg(
         "Sorry, there was an error sending your message. Please try again later."
       );
@@ -93,7 +94,7 @@ const Contact = () => {
                   type="text"
                   required
                   className="mt-1 w-full rounded-md border-slate-300 bg-slate-100 focus:border-indigo-500 focus:ring-indigo-500"
-                  placeholder="Madhuri Goel"
+                  placeholder="Your name"
                 />
               </div>
               <div className="grid sm:grid-cols-2 gap-4 mt-4">
@@ -110,7 +111,7 @@ const Contact = () => {
                     type="email"
                     required
                     className="mt-1 w-full rounded-md border-slate-300 bg-slate-100 focus:border-indigo-500 focus:ring-indigo-500"
-                    placeholder="madhuri@example.com"
+                    placeholder="yourname@example.com"
                   />
                 </div>
                 <div>

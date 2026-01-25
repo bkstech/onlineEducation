@@ -23,6 +23,8 @@ public partial class EstudydbContext : DbContext
     // Keep a single DbSet for invited candidates (name matches existing usage in controllers)
     public virtual DbSet<InvitedCandidate> Invitedcandidates { get; set; }
 
+    public virtual DbSet<PasswordResettoken> PasswordResettokens { get; set; }
+
     public virtual DbSet<PrismaMigration> PrismaMigrations { get; set; }
 
     public virtual DbSet<Teacher> Teachers { get; set; }
@@ -140,6 +142,17 @@ public partial class EstudydbContext : DbContext
 
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
+        });
+
+        modelBuilder.Entity<PasswordResettoken>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+            entity.ToTable("passwordresettokens");
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Email).HasMaxLength(255).HasColumnName("email");
+            entity.Property(e => e.Token).HasMaxLength(255).HasColumnName("token");
+            entity.Property(e => e.CreatedAt).HasColumnType("datetime(3)").HasDefaultValueSql("CURRENT_TIMESTAMP(3)").HasColumnName("createdAt");
+            entity.Property(e => e.ExpiresAt).HasColumnType("datetime(3)").HasColumnName("expiresAt");
         });
 
         modelBuilder.Entity<PrismaMigration>(entity =>

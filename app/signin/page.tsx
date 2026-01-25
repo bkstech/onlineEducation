@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { login as apiLogin } from "@/lib/auth";
@@ -103,10 +104,11 @@ export default function SignIn() {
           className="w-full flex items-center justify-center gap-2 border border-slate-300 rounded-md py-2 mb-4 bg-white hover:bg-slate-100 shadow-sm"
           style={{ fontWeight: 500 }}
         >
-          <img
+          <Image
             src="/img/google-icon.svg"
             alt="Google"
-            style={{ width: 20, height: 20 }}
+            width={20}
+            height={20}
           />
           Sign in with Google
         </button>

@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function Home() {
   return (
     <main>
@@ -31,7 +33,7 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <figure className="overflow-hidden rounded-lg shadow">
-                <img
+                <Image
                   src="/img/studentteacher.jpeg"
                   alt="Woman teacher with a 12 year old student"
                   className="h-full w-full object-cover"
@@ -41,7 +43,7 @@ export default function Home() {
                 </figcaption>
               </figure>
               <figure className="overflow-hidden rounded-lg shadow">
-                <img
+                <Image
                   src="/img/parentdropkidstoschool.jpeg"
                   alt="Parents dropping kid to school"
                   className="h-full w-full object-cover"

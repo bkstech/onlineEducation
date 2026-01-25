@@ -5,6 +5,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Api.Models;
+using System.Net.Http;
+using System.Net.Http.Json;
 using API.DTOs;
 using BCrypt.Net;
 
@@ -14,6 +16,7 @@ namespace API.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
+    private readonly IHttpClientFactory _httpClientFactory;
     // POST: /api/login/teacher
     [HttpPost("login/teacher")]
     public async Task<ActionResult<AuthResponse>> LoginTeacher([FromBody] LoginRequest request)
@@ -99,6 +102,84 @@ public class AuthController : ControllerBase
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
+    // POST: api/Auth/forgot
+    [HttpPost("forgot")]
+    // Prepare email payload
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+    {
+        // Generate a token and persist it so the reset endpoint can validate it
+        var token = Guid.NewGuid().ToString("N");
+        var tokenEntry = new PasswordResettoken
+        {
+            Email = request.Email,
+            Token = token,
+            CreatedAt = DateTime.UtcNow,
+            ExpiresAt = DateTime.UtcNow.AddHours(1)
+        };
+
+        try
+        {
+            _context.PasswordResettokens.Add(tokenEntry);
+            await _context.SaveChangesAsync();
+        }
+        catch
+        {
+            // swallow DB errors to avoid exposing internal state; continue to avoid revealing whether email exists
+        }
+
+        var resetLink = $"{Request.Scheme}://{Request.Host}/api/Auth/reset?token={token}";
+        var emailPayload = new { To = request.Email, Subject = "Password reset request", Body = $"Click the link to reset your password: <a href=\"{resetLink}\">{resetLink}</a>" };
+        try
+        {
+            var client = _httpClientFactory.CreateClient();
+            var notificationUrl = $"{Request.Scheme}://{Request.Host}/api/notificationcontrollers/email";
+            var resp = await client.PostAsJsonAsync(notificationUrl, emailPayload);
+            // ignore response details to avoid exposing internal errors
+        }
+        catch
+        {
+            // swallow exceptions from notification to avoid leaking internal state
+        }
+
+        return Ok(new { message = "If this email is registered, a password reset link has been sent." });
+    }
+
+    // POST: api/Auth/reset
+    [HttpPost("reset")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Token) || string.IsNullOrWhiteSpace(request.Password))
+            return BadRequest(new { message = "Token and password are required" });
+
+        var tokenEntry = await _context.PasswordResettokens.FirstOrDefaultAsync(t => t.Token == request.Token);
+        if (tokenEntry == null || tokenEntry.ExpiresAt < DateTime.UtcNow)
+            return BadRequest(new { message = "Invalid or expired token" });
+
+        // Find user by email (candidate or teacher)
+        var email = tokenEntry.Email;
+        var candidate = await _context.Candidates.FirstOrDefaultAsync(c => c.Email == email);
+        if (candidate != null)
+        {
+            candidate.Userpassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
+            await _context.SaveChangesAsync();
+            _context.PasswordResettokens.Remove(tokenEntry);
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Password reset successful" });
+        }
+
+        var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.Email == email);
+        if (teacher != null)
+        {
+            teacher.Userpassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
+            await _context.SaveChangesAsync();
+            _context.PasswordResettokens.Remove(tokenEntry);
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Password reset successful" });
+        }
+
+        return BadRequest(new { message = "User not found for token" });
+    }
     // ...existing code...
     // ...existing code...
 
@@ -159,10 +240,13 @@ public class AuthController : ControllerBase
     private readonly EstudydbContext _context;
     private readonly IConfiguration _configuration;
 
-    public AuthController(EstudydbContext context, IConfiguration configuration)
+    public string resetLink { get; private set; } = string.Empty;
+
+    public AuthController(EstudydbContext context, IConfiguration configuration, IHttpClientFactory httpClientFactory)
     {
         _context = context;
         _configuration = configuration;
+        _httpClientFactory = httpClientFactory;
     }
 
     // POST: api/Auth/Login

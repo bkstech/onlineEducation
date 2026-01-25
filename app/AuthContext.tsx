@@ -15,6 +15,7 @@ interface AuthState {
     lastname: string;
     email: string;
     id: number;
+    role?: "student" | "teacher";
   } | null;
 }
 

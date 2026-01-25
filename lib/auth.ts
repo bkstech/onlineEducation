@@ -1,5 +1,5 @@
 // API Configuration
-const API_BASE_URL =
+export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://localhost:5001";
 
 // Types
@@ -40,9 +40,9 @@ export const saveUserInfo = (user: Omit<AuthResponse, "token">) => {
     console.error("saveUserInfo called with undefined user:", user);
     return;
   }
-  // Ensure role is present, fallback to null if missing
+  // Ensure role is present, fallback to undefined if missing
   if (!("role" in user)) {
-    user.role = null;
+    user.role = undefined;
   }
   console.log("Saving user info:", user);
   if (typeof window !== "undefined") {
@@ -101,7 +101,7 @@ export const login = async (request: LoginRequest): Promise<AuthResponse> => {
     firstname: data.firstname,
     lastname: data.lastname,
     id: data.id,
-    role: data.role ?? null,
+    role: data.role,
   });
   console.log("Logged in user role:", data.role);
   console.log("email:", data.email);
@@ -135,7 +135,7 @@ export const register = async (
     firstname: data.firstname,
     lastname: data.lastname,
     id: data.id,
-    role: data.role ?? null,
+    role: data.role,
   });
 
   return data;
