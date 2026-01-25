@@ -1,6 +1,6 @@
 using System;
 
-namespace api.Models;
+namespace Api.Models;
 
 public partial class InvitedCandidate
 {
