@@ -12,9 +12,9 @@ export default function Home() {
                 Empowering Students and Families with Expert Guidance
               </h1>
               <p className="mt-4 text-lg text-slate-600">
-                From personalized school education support to child/parent
-                counselling and language learning, we deliver trusted online
-                services designed around you.
+                Personalized support for child/parent counselling and language
+                learning, we deliver trusted online services designed around
+                you.
               </p>
               <div className="mt-6 flex gap-3">
                 <a
