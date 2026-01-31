@@ -33,6 +33,8 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <figure className="overflow-hidden rounded-lg shadow">
                 <Image
+                  width={400}
+                  height={300}
                   src="/img/studentteacher.jpeg"
                   alt="Woman teacher with a 12 year old student"
                   className="h-full w-full object-cover"
@@ -43,6 +45,8 @@ export default function Home() {
               </figure>
               <figure className="overflow-hidden rounded-lg shadow">
                 <Image
+                  width={400}
+                  height={300}
                   src="/img/parentdropkidstoschool.jpeg"
                   alt="Parents dropping kid to school"
                   className="h-full w-full object-cover"

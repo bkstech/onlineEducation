@@ -94,7 +94,7 @@ export default function RootLayout({
                     Contact Us
                   </Link>
                   {/* Show user's name if logged in, else show Sign-in */}
-                  <UserNav />
+                  {/*<UserNav />*/}
                 </nav>
               </div>
               {/* Mobile menu (static, not functional in this snippet) */}
