@@ -13,7 +13,7 @@ export default function Home() {
               </h1>
               <p className="mt-4 text-lg text-slate-600">
                 Personalized support for child/parent counselling, we deliver
-                trusted online services designed around you..
+                trusted online services designed around you...
               </p>
               <div className="mt-6 flex gap-3">
                 <a
