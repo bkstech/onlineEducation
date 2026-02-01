@@ -35,7 +35,7 @@ export default function Home() {
                 <Image
                   width={400}
                   height={300}
-                  src="/img/studentteacher.jpeg"
+                  src="/img/surabhiwithbook.jpeg"
                   alt="Woman teacher with a 12 year old student"
                   className="h-full w-full object-cover"
                 />
@@ -43,16 +43,16 @@ export default function Home() {
                   One-to-one online tutoring
                 </figcaption>
               </figure>
-              <figure className="overflow-hidden rounded-lg shadow">
+              <figure className="overflow-hidden rounded-br-none shadow">
                 <Image
-                  width={400}
-                  height={300}
-                  src="/img/parentdropkidstoschool.jpeg"
+                  width={300}
+                  height={400}
+                  src="/img/revisitingparenting.png"
                   alt="Parents dropping kid to school"
-                  className="h-full w-full object-cover"
+                  className="h-fit w-fit object-cover"
                 />
                 <figcaption className="p-3 text-sm text-slate-600 bg-white">
-                  Support for families and learners
+                  Book written by Surabhi Varshney on Parenting
                 </figcaption>
               </figure>
             </div>
